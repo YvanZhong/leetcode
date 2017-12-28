@@ -1,5 +1,7 @@
 package nowcoder.offer;
 
+import java.util.ArrayList;
+
 /**
  * Created by Zhong on 2017/12/27.
  */
@@ -145,10 +147,61 @@ public class Solution {
         return head.next;
     }
 
+    public ArrayList<Integer> printMatrix(int [][] matrix) {
+        ArrayList<Integer>  arr = new ArrayList<>();
+        int count = matrix.length * (matrix.length > 0 ? matrix[0].length : 0);
+        int i = 0, j = 0, times = 0;
+        while (count > 0) {
+            int row = times;
+            int col = matrix.length - times - 1;
+            while (j < matrix[i].length - times) {
+//                System.out.println(i + " " + j);
+                arr.add(matrix[i][j]);
+                count--;
+                j++;
+            }
+            j--;
+
+            i++;
+            while (i < matrix.length - times) {
+//                System.out.println(i + " " + j);
+                arr.add(matrix[i][j]);
+                count--;
+                i++;
+            }
+            i--;
+
+            j--;
+            while (j >= times && i != times) {
+//                System.out.println(i + " " + j);
+                arr.add(matrix[i][j]);
+                count--;
+                j--;
+            }
+            j++;
+
+            i--;
+            while (i >= times + 1 && j != matrix[i].length - times - 1) {
+                System.out.println(matrix[i].length - times - 1);
+                System.out.println(i + " " + j);
+                arr.add(matrix[i][j]);
+                count--;
+                i--;
+            }
+            i++;
+            j++;
+            times++;
+//            System.out.println("i " + i + " j " + j + " times " + times + " count " + count);
+        }
+
+        return arr;
+    }
+
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
 //        new Solution().reOrderArray(new int[]{1, 2, 3, 4, 5, 6, 7});
-        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
-        System.out.println(l.val);
+//        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
+//        System.out.println(l.val);
+        new Solution().printMatrix(new int[][] {{1},{5},{9}});
     }
 }

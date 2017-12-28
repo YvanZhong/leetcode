@@ -1,5 +1,10 @@
 package binarySearch;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Stack;
+
 public class KthSmallestElementinaSortedMatrix {
     //wrong answer
     public int kthSmallest(int[][] matrix, int k) {
@@ -9,6 +14,12 @@ public class KthSmallestElementinaSortedMatrix {
         int x1 = 0, y1 = 1, x2 = 1, y2 = 0;
 
         int i = 1;
+
+        ArrayList<Integer> ls = new ArrayList<>();
+        ls.add(1);
+        Collections.reverse(ls);
+
+        Stack<Integer> s = new Stack<>();
 
         while (i < k - 1) {
             System.out.println("i: "+ i + " x1: " + x1 + " y1: " + y1 + " x2: " + x2 + " y2: " + y2);
@@ -44,6 +55,8 @@ public class KthSmallestElementinaSortedMatrix {
 
 
     }
+
+
 
     public static void main(String... args) {
         int[][] param = {
