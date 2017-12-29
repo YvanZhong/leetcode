@@ -1,6 +1,7 @@
 package nowcoder.offer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Zhong on 2017/12/27.
@@ -147,8 +148,8 @@ public class Solution {
         return head.next;
     }
 
-    public ArrayList<Integer> printMatrix(int [][] matrix) {
-        ArrayList<Integer>  arr = new ArrayList<>();
+    public ArrayList<Integer> printMatrix(int[][] matrix) {
+        ArrayList<Integer> arr = new ArrayList<>();
         int count = matrix.length * (matrix.length > 0 ? matrix[0].length : 0);
         int i = 0, j = 0, times = 0;
         while (count > 0) {
@@ -197,11 +198,61 @@ public class Solution {
         return arr;
     }
 
+
+    public class RandomListNode {
+        int label;
+        RandomListNode next = null;
+        RandomListNode random = null;
+
+        RandomListNode(int label) {
+            this.label = label;
+        }
+    }
+
+
+    public RandomListNode Clone(RandomListNode pHead) {
+        RandomListNode newHead = null, cur1 = pHead, cur2 = null;
+        HashMap<RandomListNode, Integer> m1 = new HashMap<>();
+        HashMap<Integer, RandomListNode> m2 = new HashMap<>();
+
+        int i = 1;
+        while (cur1 != null) {
+
+            m1.put(cur1, i);
+
+            if (cur2 == null) {
+                cur2 = new RandomListNode(cur1.label);
+                cur2.random = cur1.random;
+                newHead = cur2;
+            } else {
+                cur2.next = new RandomListNode(cur1.label);
+                cur2 = cur2.next;
+                cur2.random = cur1.random;
+            }
+            m2.put(i, cur2);
+            i++;
+            cur1 = cur1.next;
+        }
+
+        cur2 = newHead;
+        while (cur2 != null) {
+            if (cur2.random != null)
+                cur2.random = m2.get(m1.get(cur2.random));
+
+            cur2 = cur2.next;
+        }
+
+        return newHead;
+
+    }
+
+
+
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
 //        new Solution().reOrderArray(new int[]{1, 2, 3, 4, 5, 6, 7});
 //        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
 //        System.out.println(l.val);
-        new Solution().printMatrix(new int[][] {{1},{5},{9}});
+        new Solution().printMatrix(new int[][]{{1}, {5}, {9}});
     }
 }
