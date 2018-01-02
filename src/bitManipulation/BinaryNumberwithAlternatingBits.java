@@ -1,7 +1,6 @@
 package bitManipulation;
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.BitArray;
-import scala.Int;
 
 import java.util.Arrays;
 

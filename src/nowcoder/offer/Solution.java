@@ -1,7 +1,6 @@
 package nowcoder.offer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by Zhong on 2017/12/27.
@@ -247,12 +246,234 @@ public class Solution {
     }
 
 
+    public ArrayList<Integer> GetLeastNumbers_Solution(int[] input, int k) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        //检查输入的特殊情况
+        if (input == null || input.length <= 0 || input.length < k) {
+            return list;
+        }
+        //构建最大堆
+        for (int len = k / 2 - 1; len >= 0; len--) {
+            adjustMaxHeapSort(input, len, k - 1);
+        }
+        //从第k个元素开始分别与最大堆的最大值做比较，如果比最大值小，则替换并调整堆。
+        //最终堆里的就是最小的K个数。
+        int tmp;
+        for (int i = k; i < input.length; i++) {
+            if (input[i] < input[0]) {
+                tmp = input[0];
+                input[0] = input[i];
+                input[i] = tmp;
+                adjustMaxHeapSort(input, 0, k - 1);
+            }
+        }
+        for (int j = 0; j < k; j++) {
+            list.add(input[j]);
+        }
+        return list;
+    }
+
+    public void adjustMaxHeapSort(int[] input, int pos, int length) {
+        int temp;
+        int child;
+        for (temp = input[pos]; 2 * pos + 1 <= length; pos = child) {
+            child = 2 * pos + 1;
+            if (child < length && input[child] < input[child + 1]) {
+                child++;
+            }
+            if (input[child] > temp) {
+                input[pos] = input[child];
+            } else {
+                break;
+            }
+        }
+        input[pos] = temp;
+    }
+
+    public ArrayList<Integer> GetLeastNumbers_Solution2(int[] input, int k) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        //检查输入的特殊情况
+        if (input == null || input.length == 0 || input.length < k) {
+            return list;
+        }
+        //构建最小堆
+        for (int len = input.length / 2 - 1; len >= 0; len--) {
+            adjustMinHeapSort(input, len, input.length);
+        }
+
+        for (int n : input) {
+            System.out.print(n + " ");
+        }
+        System.out.println();
+
+        int tmp;
+        for (int i = 0; i < k; i++) {
+            list.add(input[0]);
+            tmp = input[input.length - i - 1];
+            input[input.length - i - 1] = input[0];
+            input[0] = tmp;
+            for (int n : input) {
+                System.out.print("b " + n + " ");
+            }
+            System.out.println();
+            adjustMinHeapSort(input, 0, input.length - i - 2);
+            for (int n : input) {
+                System.out.print("a " + n + " ");
+            }
+            System.out.println();
+        }
+        return list;
+    }
+
+    public void adjustMinHeapSort(int[] input, int pos, int length) {
+        int temp;
+        int child;
+        for (temp = input[pos]; 2 * pos + 1 <= length; pos = child) {
+            child = 2 * pos + 1;
+            if (child < length - 1 && input[child] > input[child + 1]) {
+                child++;
+            }
+            if (input[child] < temp) {
+                input[pos] = input[child];
+            } else {
+                break;
+            }
+        }
+        input[pos] = temp;
+    }
+
+
+    public String PrintMinNumber(int[] numbers) {
+        int n;
+        StringBuilder s = new StringBuilder();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        n = numbers.length;
+        for (int i = 0; i < n; i++) {
+            list.add(numbers[i]);
+        }
+        Collections.sort(list, (str1, str2) -> {
+            String s1 = str1 + "" + str2;
+            String s2 = str2 + "" + str1;
+            return s1.compareTo(s2); }
+        );
+        /*new Comparator<Integer>() {
+
+            public int compare(Integer str1, Integer str2) {
+                String s1 = str1 + "" + str2;
+                String s2 = str2 + "" + str1;
+                return s1.compareTo(s2);
+            }
+        }*/
+
+        for (int j : list) {
+            s.append(j);
+        }
+        return s.toString();
+
+    }
+
+    //too slow
+    public int InversePairs1(int [] array) {
+        Stack<Integer> s1 = new Stack<>();
+        Stack<Integer> s2 = new Stack<>();
+        int count = 0;
+
+        for (int n: array) {
+            while (!s1.empty() && s1.peek() > n) {
+                count++;
+                count %= 1000000007;
+                s2.push(s1.pop());
+            }
+
+            s1.push(n);
+            while (!s2.empty()) {
+                s1.push(s2.pop());
+            }
+        }
+
+        return count;
+    }
+
+    public int inversePairs(int [] array) {
+        return inversePairsHelper(array, 0, array.length - 1);
+    }
+
+    private int inversePairsHelper(int[] array, int start, int end) {
+        if (start == end) return 0;
+        int mid = start + (end - start) / 2;
+        int left = inversePairsHelper(array, start, mid);
+        int right = inversePairsHelper(array, mid + 1, end);
+
+        int count = 0;
+
+        int i = start, j = mid + 1;
+        int[] tmp = new int[end - start + 1];
+        int k = 0;
+        while (i <= mid && j <= end) {
+            if (array[i] <= array[j]) {
+                tmp[k++] = array[i++];
+            } else {
+                tmp[k++] = array[j++];
+                count += mid - i + 1;
+            }
+        }
+
+        while (i <= mid) {
+            tmp[k++] = array[i++];
+        }
+
+        while (j <= end) {
+            tmp[k++] = array[j++];
+        }
+
+        for (k = 0; k < tmp.length; k++) {
+            array[start + k] = tmp[k];
+        }
+
+        return left + right + count;
+    }
+
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+        Set<ListNode> set = new HashSet<>();
+
+        while(pHead1 != null || pHead2 != null) {
+            if (pHead1 != null) {
+                if (set.contains(pHead1)) {
+                    return pHead1;
+                }
+                set.add(pHead1);
+                pHead1 = pHead1.next;
+            }
+            if (pHead2 != null) {
+                if (set.contains(pHead2)) {
+                    return pHead2;
+                }
+                set.add(pHead2);
+                pHead2 = pHead2.next;
+            }
+        }
+
+        return null;
+    }
+
+    public ListNode FindFirstCommonNode2(ListNode pHead1, ListNode pHead2) {
+        ListNode cur1 = pHead1;
+        ListNode cur2 = pHead2;
+        while (cur1 != cur2) {
+            cur1 = cur1.next == null ? pHead2 : cur1.next;
+            cur2 = cur2.next == null ? pHead1 : cur2.next;
+        }
+
+        return null;
+    }
+
 
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
 //        new Solution().reOrderArray(new int[]{1, 2, 3, 4, 5, 6, 7});
 //        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
 //        System.out.println(l.val);
-        new Solution().printMatrix(new int[][]{{1}, {5}, {9}});
+//        new Solution().printMatrix(new int[][]{{1}, {5}, {9}});
+        new Solution().GetLeastNumbers_Solution2(new int[]{1, 2, 3, 4, 5, 6, 7, 8}, 8);
     }
 }
