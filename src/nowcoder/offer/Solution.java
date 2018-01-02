@@ -352,9 +352,10 @@ public class Solution {
             list.add(numbers[i]);
         }
         Collections.sort(list, (str1, str2) -> {
-            String s1 = str1 + "" + str2;
-            String s2 = str2 + "" + str1;
-            return s1.compareTo(s2); }
+                    String s1 = str1 + "" + str2;
+                    String s2 = str2 + "" + str1;
+                    return s1.compareTo(s2);
+                }
         );
         /*new Comparator<Integer>() {
 
@@ -373,12 +374,12 @@ public class Solution {
     }
 
     //too slow
-    public int InversePairs1(int [] array) {
+    public int InversePairs1(int[] array) {
         Stack<Integer> s1 = new Stack<>();
         Stack<Integer> s2 = new Stack<>();
         int count = 0;
 
-        for (int n: array) {
+        for (int n : array) {
             while (!s1.empty() && s1.peek() > n) {
                 count++;
                 count %= 1000000007;
@@ -394,7 +395,7 @@ public class Solution {
         return count;
     }
 
-    public int inversePairs(int [] array) {
+    public int inversePairs(int[] array) {
         return inversePairsHelper(array, 0, array.length - 1);
     }
 
@@ -436,7 +437,7 @@ public class Solution {
     public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
         Set<ListNode> set = new HashSet<>();
 
-        while(pHead1 != null || pHead2 != null) {
+        while (pHead1 != null || pHead2 != null) {
             if (pHead1 != null) {
                 if (set.contains(pHead1)) {
                     return pHead1;
@@ -467,6 +468,58 @@ public class Solution {
         return null;
     }
 
+    public ArrayList<ArrayList<Integer>> FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<ArrayList<Integer>>();
+        if (sum <= 1) {
+            return lists;
+        }
+        int small = 1;
+        int big = 2;
+        int curSum = 3;
+
+        while (small != (1 + sum) / 2) {          //当small==(1+sum)/2的时候停止
+            System.out.println(curSum);
+            if (curSum == sum) {
+                ArrayList<Integer> list = new ArrayList<Integer>();
+                for (int i = small; i <= big; i++) {
+                    list.add(i);
+                }
+                lists.add(list);
+                small++;
+                big++;
+                curSum += big - small + 1;
+            } else if (curSum < sum) {
+                big++;
+                curSum += big;
+            } else {
+                curSum -= small;
+                small++;
+            }
+        }
+        return lists;
+    }
+
+    public String LeftRotateString(String str,int n) {
+        int abs = n % str.length();
+        if (abs < 0) abs += n;
+
+        return (str + str).substring(n, str.length());
+    }
+
+    public String ReverseSentence(String str) {
+        String[] array = str.split(" ");
+        List<String> ls = Arrays.asList(array);
+        Collections.reverse(ls);
+        StringBuilder sb = new StringBuilder();
+        for (String s: ls) {
+            sb.append(s);
+            sb.append(" ");
+        }
+        if (array.length > 0 )sb.deleteCharAt(sb.length() - 1); else return str;
+
+        return sb.toString();
+    }
+
 
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
@@ -474,6 +527,7 @@ public class Solution {
 //        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
 //        System.out.println(l.val);
 //        new Solution().printMatrix(new int[][]{{1}, {5}, {9}});
-        new Solution().GetLeastNumbers_Solution2(new int[]{1, 2, 3, 4, 5, 6, 7, 8}, 8);
+//        new Solution().GetLeastNumbers_Solution2(new int[]{1, 2, 3, 4, 5, 6, 7, 8}, 8);
+        new Solution().FindContinuousSequence(9);
     }
 }
