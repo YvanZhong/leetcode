@@ -1,6 +1,8 @@
 package nowcoder.offer;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Zhong on 2017/12/27.
@@ -520,6 +522,39 @@ public class Solution {
         return sb.toString();
     }
 
+    //注意数组时null的情况
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        int[] flag = new int[length];
+
+        for (int i = 0; i < length; i++) {
+            if (flag[numbers[i]] == 1) {
+                duplication[0] = numbers[i];
+                return true;
+            }
+            flag[numbers[i]] = 1;
+        }
+        return false;
+    }
+
+    public int[] multiply(int[] A) {
+        int[] rst1 = new int[A.length];
+        int[] rst2 = new int[A.length];
+        if (rst1.length <= 1) return rst1;
+
+        rst1[0] = 1;
+        for (int i = 1; i < rst1.length; i++) {
+            rst1[i] = rst1[i - 1] * A[i - 1];
+        }
+
+        rst2[rst2.length - 1] = 1;
+        for (int i = rst2.length - 2; i >= 0; i--) {
+            rst2[i] = rst2[i + 1] * A[i + 1];
+            rst1[i] *= rst2[i];
+        }
+
+
+        return rst1;
+    }
 
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
@@ -528,6 +563,9 @@ public class Solution {
 //        System.out.println(l.val);
 //        new Solution().printMatrix(new int[][]{{1}, {5}, {9}});
 //        new Solution().GetLeastNumbers_Solution2(new int[]{1, 2, 3, 4, 5, 6, 7, 8}, 8);
-        new Solution().FindContinuousSequence(9);
+//        new Solution().FindContinuousSequence(9);
+//        new SimpleDateFormat();
+//        new ConcurrentHashMap<>();
+        new Solution().duplicate(null, 0, new int[0]);
     }
 }
