@@ -1,5 +1,7 @@
 package nowcoder.offer;
 
+import scala.Char;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -501,7 +503,7 @@ public class Solution {
         return lists;
     }
 
-    public String LeftRotateString(String str,int n) {
+    public String LeftRotateString(String str, int n) {
         int abs = n % str.length();
         if (abs < 0) abs += n;
 
@@ -513,17 +515,18 @@ public class Solution {
         List<String> ls = Arrays.asList(array);
         Collections.reverse(ls);
         StringBuilder sb = new StringBuilder();
-        for (String s: ls) {
+        for (String s : ls) {
             sb.append(s);
             sb.append(" ");
         }
-        if (array.length > 0 )sb.deleteCharAt(sb.length() - 1); else return str;
+        if (array.length > 0) sb.deleteCharAt(sb.length() - 1);
+        else return str;
 
         return sb.toString();
     }
 
     //注意数组时null的情况
-    public boolean duplicate(int numbers[],int length,int [] duplication) {
+    public boolean duplicate(int numbers[], int length, int[] duplication) {
         int[] flag = new int[length];
 
         for (int i = 0; i < length; i++) {
@@ -554,6 +557,57 @@ public class Solution {
 
 
         return rst1;
+    }
+
+    /*public boolean match(char[] str, char[] pattern) {
+        return matchHelper(str, pattern, 0, 0);
+    }
+
+    private boolean matchHelper(char[] str, char[] pattern, int strIndex, int patternIndex) {
+        if (strIndex == str.length && patternIndex == pattern.length) return true;
+
+        if (patternIndex == pattern.length && strIndex < str.length) return false;
+
+        if (patternIndex + 1 < pattern.length && pattern[patternIndex + 1] == '*') {
+            if (str[strIndex] == pattern[patternIndex]) {
+                return matchHelper(str, pattern, strIndex, patternIndex + 2) ||
+                        matchHelper(str, pattern, strIndex + 1, patternIndex + 2) ||
+                        matchHelper(str, pattern, strIndex + 1, patternIndex);
+            } else {
+                return matchHelper(str, pattern, strIndex, patternIndex + 2);
+            }
+        } else {
+            if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+                return matchHelper(str, pattern, strIndex + 1, patternIndex + 1);
+            }
+        }
+
+        return false;
+    }*/
+
+    public class TreeNode {
+        int val = 0;
+        TreeNode left = null;
+        TreeNode right = null;
+
+        public TreeNode(int val) {
+            this.val = val;
+
+        }
+
+    }
+    boolean isSymmetrical(TreeNode pRoot)
+    {
+        if (pRoot == null) return true;
+        else return symmetrical(pRoot.left, pRoot.right);
+    }
+
+    private boolean symmetrical(TreeNode n1, TreeNode n2) {
+        if (n1 == null && n2 == null) return true;
+        if (n1 != null && n2 != null) {
+            return n1.val == n2.val && symmetrical(n1.left, n2.right) && symmetrical(n1.right, n2.left);
+        }
+        return false;
     }
 
     public static void main(String... args) {
