@@ -1,6 +1,8 @@
 package nowcoder.offer;
 
 import scala.Char;
+import scala.Int;
+import sun.reflect.generics.tree.Tree;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -585,7 +587,7 @@ public class Solution {
         return false;
     }*/
 
-    public class TreeNode {
+    public static class TreeNode {
         int val = 0;
         TreeNode left = null;
         TreeNode right = null;
@@ -610,6 +612,191 @@ public class Solution {
         return false;
     }
 
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> rst = new ArrayList<>();
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        if (pRoot != null) {
+            q.offer(pRoot);
+        }
+
+        int count = 1;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            ArrayList<Integer> tmp = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode h = q.poll();
+                if (count % 2 == 1) {
+                    tmp.add(h.val);
+                } else {
+                    tmp.add(0, h.val);
+                }
+                if (h.left != null) q.offer(h.left);
+                if (h.right != null) q.offer(h.right);
+            }
+            rst.add(tmp);
+        }
+
+        for (ArrayList<Integer> a: rst ) {
+            for (int i: a) {
+                System.out.print(i + ",");
+            }
+        }
+
+        return rst;
+    }
+
+    String Serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+
+        Queue<TreeNode> q = new LinkedList<>();
+
+        if (root != null) {
+            q.offer(root);
+        } else {
+            return "";
+        }
+
+        int count = 1;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode h = q.poll();
+                if (h == null) {
+                    sb.append("#,");
+                } else {
+                    sb.append(h.val);
+                    count = sb.length();
+                    sb.append(",");
+                    q.offer(h.left);
+                    q.offer(h.right);
+                }
+            }
+        }
+
+        return sb.substring(0, count);
+    }
+    TreeNode Deserialize(String str) {
+        String[] array = str.split(",");
+        TreeNode head = null;
+        if (array.length == 0 || array[0] == "") return head;
+        System.out.println(array.length);
+        System.out.println(array[0]);
+//        return generateTree(array, 0);
+        head = new TreeNode(Integer.valueOf(array[0]));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(head);
+        int index = 1;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                TreeNode cur = q.poll();
+                int j = 0;
+                while (j < 2) {
+                    if (index < array.length) {
+                        if (array[index].equals("#")) {
+
+                        } else {
+                            TreeNode tmp = new TreeNode(Integer.valueOf(array[index]));
+                            if (j == 0 )
+                                cur.left = tmp;
+                            else
+                                cur.right = tmp;
+                            q.offer(tmp);
+                        }
+                    } else {
+                        return head;
+                    }
+                    index++;
+                    j++;
+                }
+
+            }
+        }
+
+        return head;
+    }
+
+    TreeNode generateTree(String[] array, int i) {
+        if (i >= array.length) {
+            return null;
+        } else {
+            if (array[i].equals("#")) {
+                return null;
+            }
+            TreeNode node = new TreeNode(Integer.valueOf(array[i]));
+            node.left = generateTree(array, 2 * i + 1);
+            node.right = generateTree(array, 2 * i + 2);
+            return node;
+        }
+    }
+
+    private PriorityQueue<Integer> min = new PriorityQueue<>();
+    private PriorityQueue<Integer> max = new PriorityQueue<>((a, b) -> b - a);
+    private int count = 0;
+
+    public void Insert(Integer num) {
+        if (count % 2 == 0) {
+            min.add(num);
+            max.add(min.poll());
+        } else {
+            max.add(num);
+            min.add(max.poll());
+        }
+        count++;
+    }
+
+    public Double GetMedian() {
+        if (count % 2 == 0) {
+            if (max.isEmpty()) {
+                return 0.0;
+            } else {
+                return (double)(max.peek() + min.peek())/2;
+            }
+        } else {
+            return (double)max.peek();
+        }
+    }
+
+    static public ArrayList<Integer> maxInWindows(int [] num, int size)
+    {
+        ArrayList<Integer> rst = new ArrayList<>();
+        if (size == 0 || size > num.length) return rst;
+        int maxIndex = 0;
+        int i = 1;
+        for (; i < size; i++) {
+            if (num[i] > num[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+        rst.add(num[maxIndex]);
+
+        System.out.println(maxIndex);
+        System.out.println(i);
+
+        for (; i < num.length; i++) {
+            if (maxIndex == i - size) {
+                maxIndex += 1;
+                for (int j = maxIndex + 1; j <= i; j++) {
+                    if (num[j] > num[maxIndex]) {
+                        maxIndex = j;
+                    }
+                }
+            } else {
+                System.out.println(maxIndex + " "+ i);
+                if (num[maxIndex] < num[i]) {
+                    maxIndex = i;
+                }
+            }
+            rst.add(num[maxIndex]);
+
+        }
+
+        return rst;
+
+    }
+
     public static void main(String... args) {
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
 //        new Solution().reOrderArray(new int[]{1, 2, 3, 4, 5, 6, 7});
@@ -620,6 +807,19 @@ public class Solution {
 //        new Solution().FindContinuousSequence(9);
 //        new SimpleDateFormat();
 //        new ConcurrentHashMap<>();
-        new Solution().duplicate(null, 0, new int[0]);
+//        new Solution().duplicate(null, 0, new int[0]);
+
+        /*TreeNode n1 = new TreeNode(1);
+        TreeNode n2 = new TreeNode(2);
+        TreeNode n3 = new TreeNode(3);
+        TreeNode n4 = new TreeNode(4);
+        TreeNode n0 = new TreeNode(5);
+        n4.left = n3;
+        n3.left = n2;
+        n0.left = n4;
+        System.out.println(new Solution().Serialize(n0));
+        new Solution().Print(new Solution().Deserialize(""));*/
+
+        maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
     }
 }
