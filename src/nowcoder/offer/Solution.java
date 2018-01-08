@@ -379,6 +379,25 @@ public class Solution {
 
     }
 
+    /* 200ms 比上面方法慢（仅一次测试）*/
+    public String PrintMinNumber2(int [] numbers) {
+		PriorityQueue<Integer> q = new PriorityQueue<>(
+            (a, b) ->
+            	(a+""+b).compareTo(b+""+a)
+        );
+
+        for (int n: numbers) {
+            q.add(n);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (!q.isEmpty()) {
+            sb.append(q.poll());
+        }
+
+        return sb.toString();
+    }
+
     //too slow
     public int InversePairs1(int[] array) {
         Stack<Integer> s1 = new Stack<>();
@@ -797,7 +816,28 @@ public class Solution {
 
     }
 
+    void waitForSignal(){
+        Object obj = new Object();
+        synchronized(Thread.currentThread())
+        {
+            try {
+
+                obj.wait();
+
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+
+            }
+            obj.notify();
+        }
+    }
+
     public static void main(String... args) {
+
+        class A {
+
+        }
 //        System.out.println(new Solution().NumberOf1(Integer.MIN_VALUE));
 //        new Solution().reOrderArray(new int[]{1, 2, 3, 4, 5, 6, 7});
 //        ListNode l = new Solution().Merge(new ListNode(1), new ListNode(2));
@@ -821,5 +861,11 @@ public class Solution {
         new Solution().Print(new Solution().Deserialize(""));*/
 
         maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
+
+        int STRING = 1;
+
+        long l = 023;
+
+//        new Solution().waitForSignal();
     }
 }
