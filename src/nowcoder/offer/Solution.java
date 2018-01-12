@@ -839,6 +839,78 @@ public class Solution {
         return s.matches("[\\+|-]?[0-9]+(\\.[0-9]*)?([e|E][\\+|-]?[0-9]+)?");
     }
 
+    public static boolean hasPath(char[] matrix, int rows, int cols, char[] str)
+    {
+        int i = 0, j = 0;
+        for (; i < rows; i++) {
+            for (j = 0; j < cols; j++) {
+                if (helper(matrix, rows, cols, str, i, j, 0)) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean helper(char[] matrix, int rows, int cols, char[] str, int i, int j, int z) {
+        if (i < 0 || i >= rows || j < 0 || j >=cols) return false;
+        int index = i * cols + j;
+
+        if (matrix[index] == '0') return false;
+
+        if (matrix[index] == str[z]) {
+
+            System.out.println(i+" "+j);
+
+            if (z == str.length - 1) return true;
+
+            char tmp = matrix[index];
+            matrix[index] = '0';
+            if (helper(matrix, rows, cols, str, i - 1, j, z + 1) ||
+                    helper(matrix, rows, cols, str, i + 1, j, z + 1) ||
+                    helper(matrix, rows, cols, str, i, j+1, z + 1) ||
+                    helper(matrix, rows, cols, str, i, j - 1, z + 1))
+                return true;
+            matrix[index] = tmp;
+
+            return false;
+
+        } else {
+            return false;
+        }
+    }
+
+    public static int movingCount(int threshold, int rows, int cols)
+    {
+        return helper(threshold, rows, cols, 0, 0, new int[rows * cols]);
+    }
+
+    private static int helper(int threshold, int rows, int cols, int i, int j, int[] flag) {
+        if (i < 0 || j < 0 || i >= rows || j >= cols) return 0;
+
+        if (flag[i * cols + j] == 0 && isLeagle(i, j, threshold)) {
+            flag[i * cols + j] = 1;
+            return 1 + helper(threshold, rows, cols, i - 1, j, flag) +
+                    helper(threshold, rows, cols, i + 1, j, flag) +
+                    helper(threshold, rows, cols, i, j - 1, flag)+
+                    helper(threshold, rows, cols, i, j + 1, flag);
+        } else {
+            return 0;
+        }
+    }
+
+    private static boolean isLeagle(int i, int j, int k) {
+        int sum = 0;
+        while (i != 0) {
+            sum += i % 10;
+            i = i / 10;
+        }
+        while (j != 0) {
+            sum += j % 10;
+            j = j / 10;
+        }
+
+        return sum <= k;
+    }
+
     public static void main(String... args) {
 
         class A {
@@ -866,13 +938,15 @@ public class Solution {
         System.out.println(new Solution().Serialize(n0));
         new Solution().Print(new Solution().Deserialize(""));*/
 
-        maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
+        //maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
 
         int STRING = 1;
 
         long l = 023;
 
         System.out.println(null+"");
+
+        hasPath("ABCESFCSADEE".toCharArray(), 3, 4,"ABCCED".toCharArray());
 
 //        new Solution().waitForSignal();
     }
