@@ -23,6 +23,8 @@ public class Selection {
         Math.cos(42);
         Math.toRadians(42);
         Math.toDegrees(42);
+        Math.abs(10);
+        StringBuilder sb = new StringBuilder();
         double d = 5.3e12;
         double d2 = 0;
         float f = 1.1f;
