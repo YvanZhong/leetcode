@@ -2,9 +2,11 @@ package stack;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 public class BaseballGame {
     public int calPoints(String[] ops) {
+        Stack<Integer> s = new Stack();
         LinkedList<Integer> rounds = new LinkedList<>();
         int sum = 0;
 
