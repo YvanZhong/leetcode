@@ -56,6 +56,24 @@ public class Merge {
         }
     }
 
+
+    public static class Item implements Comparable<Item> {
+
+        String name;
+
+        int weight;
+
+        public Item(String name, int weight) {
+            this.name = name;
+            this.weight = weight;
+        }
+
+        public int compareTo(Item that) {
+            return this.weight - that.weight;
+        }
+
+    }
+
     public static void main(String[] args) {
         int[] a = new int[]{2,3,1,4,6,8,3};
 
@@ -70,6 +88,21 @@ public class Merge {
         sort(b);
         for (int e : b) {
             System.out.println(e);
+        }
+
+        System.out.println("========");
+
+        Item[] c = new Item[]{new Item("a", 2),
+                new Item("a", 3),
+                new Item("a", 1),
+                new Item("a", 4),
+                new Item("a", 6),
+                new Item("a", 8),
+                new Item("b", 3)
+        };
+        sort(c);
+        for (Item e : c) {
+            System.out.println(e.name + " " + e.weight);
         }
     }
 
@@ -87,6 +120,8 @@ public class Merge {
         merge(a, l, mid, h);
     }
 
+
+
     private static void merge(Comparable[] a, int l, int mid, int h) {
         int i = l;
         int j = mid + 1;
@@ -94,11 +129,24 @@ public class Merge {
             aux[z] = a[z];
         }
 
-        for (int z = l; z <= h; z++) {
+        /*for (int z = l; z <= h; z++) {
             if (i > mid) a[z] = aux[j++];
             else if (j > h) a[z] = aux[i++];
             else if (a[i].compareTo(a[j]) > 0) a[z] = aux[j++];
             else a[z] = aux[i++];
+        }*/
+
+        int z = l;
+        while (i <= mid && j <= h) {
+            if (a[i].compareTo(a[j]) <= 0) a[z++] = aux[i++]; // <= 决定了稳定性!!!
+            else a[z++] = aux[j++];
         }
+
+        for (;i <= mid;i++) {
+            a[z++] = aux[i];
+        }
+
+        //省略 mid 右侧， 因为已经在a中，不需要再赋值
+
     }
 }
