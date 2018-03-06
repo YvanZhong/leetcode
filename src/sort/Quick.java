@@ -73,7 +73,8 @@ public class Quick {
     }
 
     public static void main(String[] args) {
-        int[] a = new int[]{2,3,1,4,6,8,3};
+//        int[] a = new int[]{2,3,1,4,6,8,3};
+        int[] a = new int[]{0,1,2,3};
 
         sort(a);
         for (int e : a) {
