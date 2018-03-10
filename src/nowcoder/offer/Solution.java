@@ -778,7 +778,7 @@ public class Solution {
         }
     }
 
-    static public ArrayList<Integer> maxInWindows(int [] num, int size)
+    static public ArrayList<Integer> maxInWindows1(int [] num, int size)
     {
         ArrayList<Integer> rst = new ArrayList<>();
         if (size == 0 || size > num.length) return rst;
@@ -911,6 +911,90 @@ public class Solution {
         return sum <= k;
     }
 
+    public void FindNumsAppearOnce(int [] array,int num1[] , int num2[]) {
+        int xor = 0;
+        for (int n: array) {
+            xor ^= n;
+        }
+
+        num1[0] = 0;
+        num2[0] = 0;
+
+        int index1 = Integer.numberOfTrailingZeros(xor);
+
+        for (int n: array) {
+            int tmp = n;
+            if (((n >> index1) & 1) == 0) {
+                num1[0] ^= tmp;
+            } else {
+                num2[0] ^= tmp;
+            }
+        }
+    }
+
+    public int StrToInt(String str) {
+        if (str == null || str.length() == 0) return 0;
+
+        boolean positive = true;
+        int start = 0;
+        if (str.charAt(0) == '+') {
+            start++;
+        } else if (str.charAt(0) == '-') {
+            positive = false;
+            start++;
+        }
+
+        int rst = 0;
+
+        for (int i = start; i < str.length(); i++) {
+            if (str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+                rst = rst * 10 + str.charAt(i) - '0';
+            } else {
+                return 0;
+            }
+
+            if (positive && rst < 0) return 0;
+        }
+
+        return positive ? rst : -rst;
+    }
+
+    public ArrayList<Integer> maxInWindows(int [] num, int size) {
+        ArrayList<Integer> res = new ArrayList();
+        if (num == null || size == 0) return res;
+
+        Deque<Integer> dp = new LinkedList();
+
+        for (int i = 0; i < size - 1; i++) {
+            while((!dp.isEmpty()) && num[dp.peekLast()] <= num[i]) {
+                dp.removeLast();
+            }
+            dp.addLast(i);
+        }
+
+
+        for (int i = size - 1; i < num.length; i++) {
+            System.out.println(dp.peekFirst());
+            while((!dp.isEmpty()) && num[dp.peekLast()] <= num[i]) {
+                dp.removeLast();
+            }
+            dp.addLast(i);
+
+
+
+
+            if (dp.peekFirst() == i - size) {
+                dp.removeFirst();
+            }
+
+            res.add(num[dp.peekFirst()]);
+        }
+
+        System.out.println(res);
+
+        return res;
+    }
+
     public static void main(String... args) {
 
         class A {
@@ -938,15 +1022,17 @@ public class Solution {
         System.out.println(new Solution().Serialize(n0));
         new Solution().Print(new Solution().Deserialize(""));*/
 
-        //maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
+        new Solution().maxInWindows(new int[]{2,3,4,2,6,2,5,1}, 3);
 
-        int STRING = 1;
+        /*int STRING = 1;
 
         long l = 023;
 
         System.out.println(null+"");
 
-        hasPath("ABCESFCSADEE".toCharArray(), 3, 4,"ABCCED".toCharArray());
+        hasPath("ABCESFCSADEE".toCharArray(), 3, 4,"ABCCED".toCharArray());*/
+
+        //System.out.println(new Solution().StrToInt("+2147483648"));
 
 //        new Solution().waitForSignal();
     }
