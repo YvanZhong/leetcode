@@ -9,7 +9,7 @@ public class Quick {
     private static void sort(int[] a, int lo, int hi) {
         if (lo >= hi) return;
 
-        int p = partition1(a, lo, hi);
+        int p = partition(a, lo, hi);
         sort(a, lo, p - 1);
         sort(a, p + 1, hi);
     }
@@ -39,7 +39,8 @@ public class Quick {
         int i = lo, j = hi + 1;
         int v = a[lo];
         while (true) {
-            while (a[++i] < v) if (i == hi) break;
+            //while (a[++i] < v) if (i == hi) break;
+            while (a[++i] < v && i < j - 1) ;//if (i == hi) break;
             while (v < a[--j]) /*if (j == lo) break*/;
             if (i >= j) break;
             swap(a, i, j);
@@ -74,7 +75,8 @@ public class Quick {
 
     public static void main(String[] args) {
 //        int[] a = new int[]{2,3,1,4,6,8,3};
-        int[] a = new int[]{0,1,2,3};
+//        int[] a = new int[]{0,1,2,3};
+        int[] a = new int[]{3,2,1,0};
 
         sort(a);
         for (int e : a) {
