@@ -30,6 +30,8 @@ public class MyCollection {
 
     HashSet hashSet;
 
+    HashMap hashMap;
+
     TreeSet treeSet;
 
 }

@@ -15,6 +15,7 @@ public class Io {
 
             ServerSocket server = new ServerSocket(2000);
             Socket socket = server.accept();
+            socket.getInputStream();
 
         } catch (IOException e) {
 
