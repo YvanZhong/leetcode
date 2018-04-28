@@ -100,9 +100,13 @@ public class Concurrent {
 
         Boolean.valueOf(true);
 
-        //System.out.println(Runtime.getRuntime().availableProcessors());
+        System.out.println(Runtime.getRuntime().availableProcessors());
 
         //testThreadInterrupt();
+    }
+
+    public static void main2(String[] args) {
+        testThreadInterrupt();
     }
 
     private static void testThreadInterrupt() {
@@ -113,12 +117,12 @@ public class Concurrent {
             public void run() {
                 while (true && !Thread.currentThread().isInterrupted()) {
                     //run();
-                    System.out.println("working");
-                    /*try {
+                    try {
                         Thread.sleep(1000);
+                        System.out.println("working");
                     } catch (InterruptedException e) {
 
-                    }*/
+                    }
                 }
             }
         };
@@ -126,6 +130,7 @@ public class Concurrent {
         Thread thread = new Thread(runnable);
 
         thread.start();
+        thread.start(); //抛异常
 
 
 

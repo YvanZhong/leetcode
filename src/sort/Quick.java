@@ -39,9 +39,9 @@ public class Quick {
         int i = lo, j = hi + 1;
         int v = a[lo];
         while (true) {
-            //while (a[++i] < v) if (i == hi) break;
-            while (a[++i] < v && i < j - 1) ;//if (i == hi) break;
-            while (v < a[--j]) /*if (j == lo) break*/;
+            while (a[++i] < v) if (i == hi) break;
+//            while (a[++i] < v && i < j - 1) ;//if (i == hi) break;
+            while (v < a[--j]) /*if (j == lo) break*/; //important!! j == i wrong  1,2  因为最外层有一次交换 48行
             if (i >= j) break;
             swap(a, i, j);
         }

@@ -32,6 +32,14 @@ public class MyCollection {
 
     HashMap hashMap;
 
+    Hashtable hashtable;
+
     TreeSet treeSet;
+
+    Deque deque;
+
+    ArrayDeque arrayDeque;
+
+    Stack stack;
 
 }

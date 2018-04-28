@@ -5,7 +5,7 @@ import java.util.*;
 //尽量把之前做过的题目回顾一下
 public class Solution {
 
-    public class ListNode {
+    public static class ListNode {
         int val;
         ListNode next;
 
@@ -312,9 +312,157 @@ public class Solution {
         return res;
     }
 
+    public static List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList();
+        backtrack(s, 0, 1, res, "");
+        return res;
+    }
+
+    private static void backtrack(String s, int index, int count, List<String> res, String cur) {
+        if (count == 4) {
+            String str = s.substring(index);
+            if (str.length() == 1 || str.length() > 1 && str.charAt(0) != '0' && Integer.valueOf(str) <= 255) {
+                cur = cur + "." + str;
+                res.add(cur.substring(1));
+            }
+        } else {
+            if (index < s.length() - 1) {
+                backtrack(s, index + 1, count + 1, res, cur + "." + s.substring(index, index + 1));
+            }
+            if (index < s.length() - 2) {
+                backtrack(s, index + 2, count + 1, res, cur + "." + s.substring(index, index + 2));
+            }
+            if (index < s.length() - 3) {
+                String str = s.substring(index, index + 3);
+                if (Integer.valueOf(str) <= 255 && Integer.valueOf(str) >= 100)
+                    backtrack(s, index + 3, count + 1, res, cur + "." + str);
+            }
+        }
+    }
+
+    private static int count = 0;
+
+    public static boolean is_Interleave(String s1,int i,String s2,int j,String res,String s3)
+    {
+        count++;
+        System.out.println(count);
+        if(res.equals(s3) && i==s1.length() && j==s2.length())
+            return true;
+        boolean ans=false;
+        if(i<s1.length() && s1.charAt(i) == s3.charAt(i + j))
+            ans|=is_Interleave(s1,i+1,s2,j,res+s1.charAt(i),s3);
+        if(j<s2.length() && s2.charAt(j) == s3.charAt(i + j))
+            ans|=is_Interleave(s1,i,s2,j+1,res+s2.charAt(j),s3);
+        return ans;
+
+    }
+    public static boolean isInterleave(String s1, String s2, String s3) {
+        if (s1.length() + s2.length() != s3.length()) return false;
+        return is_Interleave(s1,0,s2,0,"",s3);
+    }
+
+    public boolean isInterleave1(String s1, String s2, String s3) {
+        if (s3.length() != s1.length() + s2.length()) {
+            return false;
+        }
+        boolean dp[] = new boolean[s2.length() + 1];
+        for (int i = 0; i <= s1.length(); i++) {
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0 && j == 0) {
+                    dp[j] = true;
+                } else if (i == 0) {
+                    dp[j] = dp[j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1);
+                } else if (j == 0) {
+                    dp[j] = dp[j] && s1.charAt(i - 1) == s3.charAt(i + j - 1);
+                } else {
+                    dp[j] = (dp[j] && s1.charAt(i - 1) == s3.charAt(i + j - 1)) || (dp[j - 1] && s2.charAt(j - 1) == s3.charAt(i + j - 1));
+                }
+            }
+        }
+        return dp[s2.length()];
+    }
+
+    public static void reorderList(ListNode head) {
+        if (head == null) return;
+
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode head2 = new ListNode(0);
+        //head2.next = slow;
+        //reverse
+        ListNode cur = slow.next, next = null;
+        while (cur != null) {
+            next = cur.next;
+            cur.next = head2.next;
+            head2.next = cur;
+            cur = next;
+        }
+
+        head2 = head2.next;
+
+
+
+        /*while (head.next != slow) {
+            next = head.next;
+            head.next = head2;
+            ListNode next2 = head2.next;
+            head2.next = next;
+            head = next;
+            head2 = next2;
+        }*/
+
+
+        ListNode p = head;
+        ListNode q = head2;
+        ListNode qNext = null;
+        slow.next = null;
+        while (q != null) {
+            //System.out.println()
+            qNext = q.next;
+            q.next = p.next;
+            p.next = q;
+            q = qNext;
+            p = p.next.next;
+        }
+
+//        if (!(qNext != null && qNext.next != null)) qNext.next = null;
+
+
+    }
+
+    public static int gcd(int a, int b) {
+        return (b == 0) ? a : gcd(b, a % b);
+    }
+
     ///private void dfs (int K, int A, int )
     public static void main(String[] args) {
-        System.out.println(largestRectangleArea(new int[]{2,3,4}));
+        System.out.println(gcd(0, 1));
+        System.out.println(gcd(0, 2));
+        System.out.println(gcd(1, 0));
+        System.out.println(gcd(2, 0));
+        /*ListNode head = new ListNode(1);
+        ListNode two = new ListNode(2);
+        head.next = two;
+        ListNode three = new ListNode(3);
+        two.next = three;
+        ListNode four = new ListNode(4);
+        three.next = four;
+        ListNode five = new ListNode(5);
+        four.next = five;
+        reorderList(head);
+        while (head != null) {
+            System.out.println(head.val);
+            head = head.next;
+        }*/
+//        System.out.println(isInterleave("abbbbbbcabbacaacccababaabcccabcacbcaabbbacccaaaaaababbbacbb",
+//                "ccaacabbacaccacababbbbabbcacccacccccaabaababacbbacabbbbabc",
+//                "cacbabbacbbbabcbaacbbaccacaacaacccabababbbababcccbabcabbaccabcccacccaabbcbcaccccaaaaabaaaaababbbbacbbabacbbacabbbbabc"));
+//        System.out.println(restoreIpAddresses("25525511135"));
+//        System.out.println(largestRectangleArea(new int[]{2,3,4}));
 //        System.out.println(search(new int[]{1,3}, 3));
 //        System.out.println(minWindow("aa", "aa"));
 //        System.out.println(new Solution().myAtoi("-2147483647"));
